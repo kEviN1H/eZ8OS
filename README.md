@@ -1,10 +1,6 @@
 eZ8OS
 =====
 
-An operating system for the eZ8 microcontroller
-
-eZ8 OS
-
 A free operating system for the eZ8 microcontrollers licenced under the GNU General Public Licence v2. This operating system is written from scratch in pure eZ8 assembly language.
 
 Features
