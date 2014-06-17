@@ -21,3 +21,11 @@ Built in text file viewer.
 Built in image viewer.
 Built in machine code monitor. Prints a page of flash on the screen as hexadecimal as well as ascii.
 Built in file loader program. Loads files/software via rs232 serial.
+
+Applications
+============
+
+Complete list of applications for eZ8OS:
+Midi player
+
+These applications rely on some kernel routines. It is possible to include the required kernel routines and run these applications stand-alone.
