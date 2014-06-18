@@ -182,10 +182,9 @@ Num4:
 	ret
 
 	
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;  Routine: puth
-;;;;;  Print byte as hexadecimal
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Routine: puth
+; Print byte as hexadecimal
+
 puth:
 	push R0
 	;Upper nibble

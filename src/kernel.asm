@@ -1,3 +1,6 @@
+;===================================================================================================
+; K E R N E L
+;===================================================================================================
 ;Kernel.inc
 	include "simplemath.inc"
 	include "simpledelay.inc"
@@ -25,7 +28,7 @@ init:
 	ld output_device,#O_RS232						; Set the terminal output to serial
     call init_spi
 	call init_gd									; Initialize the video display controller
-	ldx input_string,#0								; First character is 0 (termination character)
+	call init_fspi									; Initialize spi flash device(s)
 	jp initShell									; Jump to the main shell program
 	
 ;===================================================================================================

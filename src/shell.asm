@@ -1,3 +1,13 @@
+; S h e l l  I n t e r f a c e
+; For the eZ8 operating system.
+; Written by Koen van Vliet
+; Last revision: June 2014
+
+
+;===================================================================================================
+; B O O T   M E S S A G E
+;===================================================================================================
+; Temporary fix until I implement boot message files.
 bootmsg:
     ascii   "     *** eZ8 computer system ***     \r"
 	asciz	"64K ROM, 4K RAM, "
@@ -6,7 +16,10 @@ bootmsg2:
 	ascii	" commands built in.\r"
 	ascii	"by Keoni29 -- eZ8tut.sourceforge.net\r\r"
     asciz   "Ready to rock!\r"
-
+;===================================================================================================
+; K E Y  M A P
+;===================================================================================================
+; Temporary fix until I implement keymap files.
 keymap:
     db  '1',00h,00h,00h,' ',00h,'q','2';Col A
     db  '!',00h,00h,00h,' ',00h,'Q','"';Col A
@@ -27,10 +40,35 @@ keymap:
 newline:
     asciz    "\r"
 
-include "chr_gfx.inc"
-
-; To add a new program simply add it to this list.
-; Make sure to increase the value of token_count though
+;===================================================================================================
+; B U I L T  I N  C O M M A N D S
+;===================================================================================================
+; Note: Temporary fix until I implement executable files.
+;
+; To add a new command simply add it to this list.
+; Make sure to add both the token and the label.
+program_table:
+	dw  prg_divide
+	dw	prg_help
+	dw	prg_help
+	dw	prg_info
+	dw	prg_register
+	dw	prg_cls
+	dw	prg_flash
+	dw	prg_erase
+	dw	prg_open
+	dw	prg_forth
+	dw 	prg_ascii
+	dw  prg_iomon
+	dw	prg_load
+	dw  prg_execute
+	dw	prg_image
+	;dw	prg_midi
+	dw	prg_gdwrite
+	dw	prg_dir
+	dw	prg_fprint
+	dw	prg_fwrite
+	dw	prg_rdid
 
 compare_string:
 	asciz "divide"
@@ -55,28 +93,7 @@ compare_string:
 	asciz "fwrite"
 	asciz "rdid"
 	db 0
-program_table:
-	dw  prg_divide
-	dw	prg_help
-	dw	prg_help
-	dw	prg_info
-	dw	prg_register
-	dw	prg_cls
-	dw	prg_flash
-	dw	prg_erase
-	dw	prg_open
-	dw	prg_forth
-	dw 	prg_ascii
-	dw  prg_iomon
-	dw	prg_load
-	dw  prg_execute
-	dw	prg_image
-	;dw	prg_midi
-	dw	prg_gdwrite
-	dw	prg_dir
-	dw	prg_fprint
-	dw	prg_fwrite
-	dw	prg_rdid
+
 	
 success_message:
     asciz "\rREADY\r"
@@ -106,10 +123,13 @@ $$:
 	cp R3,#0
 	jr ne,$B
 $$:	
+	ld output_device,#O_RS232
 	call term_bootmsg	
 	ld R0,#00
 	;ld output_device,#O_RS232
 	EI
+	
+	ldx input_string,#0								; First character is 0 (termination character)
 	;jp inputUserString
 
 inputUserString:
@@ -164,7 +184,7 @@ processKeyHit:
 $$:
     cp keyboard_char,#0Dh
     jr nz,$F
-    call parse_input ; uncomment to enable parsing input again!!
+    call parse_input
 	call putc
     ;jr skipChar
 	ret
@@ -248,34 +268,34 @@ $$:
 ; R0 holds column
 ; R0 returns row
 getCol:
-    ldx PGADDR,#DDR                ;Set port C to output
-    COM    R0
+    ldx PGADDR,#DDR                	;Set port C to output
+    com R0
     ldx PGCTL,R0
-    COM R0
+    com R0
     
-    ldx PGOUT,R0           ;Put row on port G
-    
-    call delayshort        ;Give the lines some time to settle
-    ldx R0,PFIN            ;Read the row and store in R0
+    ldx PGOUT,R0          			;Put row on port G
+		
+    call delayshort       			;Give the lines some time to settle
+    ldx R0,PFIN           			;Read the row and store in R0
     ret
     
 SCOPE    
 getc:
-    ld R1,#8            ;Set column to H (last row)
+    ld R1,#8            			;Set column to H (last row)
     ld R3,#128
 scanKbd:
-    ld R0,R3            ;Copy R3 to R0
+    ld R0,R3            			;Copy R3 to R0
     rr R3
-    call getCol            ;Get the column bits
-    ld R2,R1            ;Load R2 with the current row index
-    add R2,#(keypress_data-1)    ;Add the address of the key register to that number
-    push R0                ;Push the column bits onto the stack
-    com @R2                ;Invert the key register
-    and R0,@R2            ;R0 = Key bits AND NOT register bits
-    pop @R2                ;Set register to current key bits
+    call getCol            			;Get the column bits
+    ld R2,R1            			;Load R2 with the current row index
+    add R2,#(keypress_data-1)    	;Add the address of the key register to that number
+    push R0                			;Push the column bits onto the stack
+    com @R2                			;Invert the key register
+    and R0,@R2            			;R0 = Key bits AND NOT register bits
+    pop @R2                			;Set register to current key bits
     ;call delay
-    jr nz,$return        ;When a key is detected return R1 = column no. and R0 = Column key bits
-    djnz R1,scanKbd        ;Decrease column index and scan next row.
+    jr nz,$return        			;When a key is detected return R1 = column no. and R0 = Column key bits
+    djnz R1,scanKbd        			;Decrease column index and scan next row.
 $return:
     ret
     

@@ -24,7 +24,9 @@
 	
 	argc				equ (keypress_data + 28)		;1
 	argv		    	equ (keypress_data + 38)		;16 arguments *2
-		
+;===================================================================================================
+; C O N T I N U E D  M A P
+;===================================================================================================
 	input_string    	equ 0100h;(argv + 32?)			;42+ characters
 	stack_base      	equ (input_string + 42 + 256)	;fingers crossed they never meet
 

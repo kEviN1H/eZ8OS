@@ -10,19 +10,11 @@
 ;	Last revision: June - 2014
 ;
 ;===================================================================================================
-;   Notes to self:
-;   - Filesystem functions do not share the same pointer register.
-;	- Filesystem size is hardcoded. Might want to change that.
-;	- When opening a file for writing the filename is not trailed with zeroes. Instead some 
-;     garbage can appear trailing the termination character. Clean up when I have time.
-;   - On error filesystem can return FFFF. This should be 0! otherwise the last page cannot be used
-;     entirely!
-;	- All output is on both gameduino and rs232!!!
-;	- Line 339 In shell.asm is changed so Return characters are sent too!
 
 
 ;Insert system frequency. (crystal frequency)
-	SYSFREQ		EQU	20000000
+	SYSFREQ		EQU	 18432000
+	;SYSFREQ		EQU	 20000000
 
 ;===================================================================================================
 ; S Y S T E M   J U M P T A B L E
@@ -113,7 +105,7 @@
 	jp 0								;+42
 	jp 0								;+48
 ;08F0h : Error messages ------------------------------------------------------------------------------------
-	jp err_file_notFound						;+0
+	jp err_file_notFound				;+0
 
 
 ;===================================================================================================
@@ -132,7 +124,7 @@ ENDMAC ld16_im
 	include "kernel.asm"
 	include "shell.asm"
 	include "errors.inc"
-	include "programs.asm"
+	include "commands.asm"
 
 ;===================================================================================================
 ; F I L E   M E M O R Y

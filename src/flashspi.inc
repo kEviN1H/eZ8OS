@@ -1,4 +1,6 @@
-; SPI flash
+;===================================================================================================
+; S P I  F L A S H  R O U T I N E S
+;===================================================================================================
 ; Tested with: 
 ; Device:	S25FL127SABMFI101
 ; Farnell:	2328002
@@ -8,6 +10,7 @@ init_fspi:
 	ret
 
 ; Routine: SPI flash bulk erase
+; -- NOT TESTED --
 fspi_b_erase:
 	spi_start
 	ld R1,#60h
@@ -15,6 +18,7 @@ fspi_b_erase:
 	spi_end
 
 ;Routine: SPI flash write page
+; -- NOT TESTED --
 fspi_wp:
 	spi_start
 	ld R1,#06h
